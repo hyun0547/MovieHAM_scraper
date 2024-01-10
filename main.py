@@ -1,12 +1,12 @@
-import requests
-import json
+from pymongo import MongoClient
 import yaml
+import json
+import requests
 
 with open('config.yaml') as f:
     CONFIG = yaml.load(f, Loader=yaml.FullLoader)
 
 def send_api(path, method):
-    print(CONFIG["api"]["tmdb"]["key"])
     API_HOST = "https://api.themoviedb.org"
     url = API_HOST + path
     headers = {'Content-Type': 'application/json', 'charset': 'UTF-8', 'Accept': '*/*'}
@@ -22,11 +22,22 @@ def send_api(path, method):
         elif method == 'POST':
             response = requests.post(url, headers=headers, data=json.dumps(body))
         print("response status %r" % response.status_code)
-        print("response text %r" % response.text)
+        
+        movies = []
+        for movie in json.loads(response.text)["results"]:
+            movies.append({"_id" if k == "id" else k:v for k,v in movie.items()})
+            
+        return movies
+        
     except Exception as ex:
         print(ex)
-  
+        
+        
+movies = send_api("/3/movie/now_playing", "GET")
 
-# 호출 예시
-send_api("/3/movie/now_playing", "GET")
+MONGO_CONFIG = CONFIG['database']['mongo']
 
+client = MongoClient(host=MONGO_CONFIG['host'], port=MONGO_CONFIG['port'], username=MONGO_CONFIG['username'], password=MONGO_CONFIG['password'])
+movieList = client.MovieHAM.movieList
+
+movieList.insert_many(movies, ordered=False)
