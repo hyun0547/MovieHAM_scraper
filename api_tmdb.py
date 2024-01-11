@@ -1,6 +1,7 @@
 import json
 import requests
 import yaml
+import googletrans
 
 with open('config.yaml') as f:
     CONFIG = yaml.load(f, Loader=yaml.FullLoader)
@@ -37,12 +38,38 @@ def get_tmdb_movie_detail(movieId):
         
     except Exception as ex:
         print(ex)
-
-
+        
+        
+        
+def get_tmdb_movie_people(movieId):
+    url = f'https://api.themoviedb.org/3/movie/{movieId}/credits'
+    headers = {'Content-Type': 'application/json', 'charset': 'UTF-8', 'Accept': '*/*'}
+    translator = googletrans.Translator()
+    
+    params = {'api_key': CONFIG["api"]["tmdb"]["key"]}
+    try:
+        casts = []
+        response = requests.get(url, headers=headers, params=params)
+        
+        for cast in json.loads(response.text)["cast"]:
+            if(cast['name']):
+                cast['name'] = translator.translate(text=cast['name'], dest='ko', src='en').text
+            if(cast['character']):
+                cast['character'] = translator.translate(text=cast['character'], dest='ko', src='en').text
+            
+            casts.append(cast)
+        
+        return casts
+    
+    except Exception as ex:
+        print(ex)
+        
+        
         
 def rename_field(origin, to, dict):
     return {to if k == origin else k:v for k,v in dict.items()}
     
     
-        
-print(json.dumps(get_tmdb_movie_detail(695721), ensure_ascii=False))
+print(get_tmdb_movie_people(660360))
+# for movie in get_tmdb_movie_detail():
+    
