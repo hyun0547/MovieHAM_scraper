@@ -35,7 +35,7 @@ def movie_init(page, sdate, edate):
         
         
 def people_init(movieId):
-    mongo_MovieHAM.mongo_insert_many(api_tmdb.get_tmdb_movie_people(movieId))
+    mongo_MovieHAM.mongo_insert_many_people(api_tmdb.get_tmdb_movie_people(movieId))
 
 
 
@@ -47,7 +47,7 @@ edate = datetime.date(2024, 1, 11)
 
 while(sdate > datetime.date(2020, 1, 1)):
     try:
-        mongo_MovieHAM.mongo_insert_many(movie_init(1, sdate, edate))
+        mongo_MovieHAM.mongo_insert_many_movies(movie_init(1, sdate, edate))
     except Exception as ex:
         print(ex)
     
