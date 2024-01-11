@@ -2,7 +2,7 @@ import json
 import requests
 import yaml
 
-with open('config.yaml') as f:
+with open('/home/movieham/movieScraper/config.yaml') as f:
     CONFIG = yaml.load(f, Loader=yaml.FullLoader)
 
 def get_tmdb_now_playing_movies():
@@ -44,5 +44,3 @@ def rename_field(origin, to, dict):
     return {to if k == origin else k:v for k,v in dict.items()}
     
     
-        
-print(json.dumps(get_tmdb_movie_detail(695721), ensure_ascii=False))

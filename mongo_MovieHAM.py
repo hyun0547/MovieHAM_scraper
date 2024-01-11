@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import yaml
 
-with open('config.yaml') as f:
+with open('/home/movieham/movieScraper/config.yaml') as f:
     CONFIG = yaml.load(f, Loader=yaml.FullLoader)
 
 MONGO_CONFIG = CONFIG['database']['mongo']
