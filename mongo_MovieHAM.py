@@ -11,8 +11,9 @@ movies = client.MovieHAM.movies
 people = client.MovieHAM.people
 
 def mongo_insert_many_movies(docs):
-    movies.insert_many(docs, ordered=False)
+    if(len(docs) != 0):
+        movies.insert_many(docs, ordered=False)
 
 def mongo_insert_many_people(docs):
-    people.insert_many(docs, ordered=False)
-
+    if(len(docs) != 0):
+        people.insert_many(docs, ordered=False)
