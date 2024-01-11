@@ -57,7 +57,7 @@ def get_tmdb_movie_people(movieId):
             if(cast['character']):
                 cast['character'] = translator.translate(text=cast['character'], dest='ko', src='en').text
             
-            casts.append(cast)
+            casts.append(rename_field('id', '_id', cast))
         
         return casts
     
