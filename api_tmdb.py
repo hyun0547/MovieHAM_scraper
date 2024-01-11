@@ -16,9 +16,33 @@ def get_tmdb_now_playing_movies():
         
         movies = []
         for movie in json.loads(response.text)["results"]:
-            movies.append({"_id" if k == "id" else k:v for k,v in movie.items()})
+            get_tmdb_movie_detail(movie['id'])
+            movies.append(rename_field("id", "_id", movie))
             
         return movies
         
     except Exception as ex:
         print(ex)
+
+
+        
+def get_tmdb_movie_detail(movieId):
+    url = f'https://api.themoviedb.org/3/movie/{movieId}'
+    headers = {'Content-Type': 'application/json', 'charset': 'UTF-8', 'Accept': '*/*'}
+    
+    params = {'api_key': CONFIG["api"]["tmdb"]["key"], 'language': 'ko-KR'}
+    try:
+        response = requests.get(url, headers=headers, params=params)
+        return json.loads(response.text)
+        
+    except Exception as ex:
+        print(ex)
+
+
+        
+def rename_field(origin, to, dict):
+    return {to if k == origin else k:v for k,v in dict.items()}
+    
+    
+        
+print(json.dumps(get_tmdb_movie_detail(695721), ensure_ascii=False))
