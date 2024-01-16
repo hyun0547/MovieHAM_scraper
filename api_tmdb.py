@@ -75,8 +75,16 @@ def get_tmdb_person(searchKey, searchVal):
     
     try:
         response = requests.get(url, headers=headers, params=params)
+        translator = googletrans.Translator()
+        person = []
         
-        return json.loads(response.text)['results']
+        for people in json.loads(response.text)['results']:
+            if(people['name']):
+                people['name'] = translator.translate(text=people['name'], dest='ko', src='en').text
+                
+            person.append(rename_field('id', '_id', people))
+            
+        return person
     
     except Exception as ex:
         print(ex)        
