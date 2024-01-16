@@ -86,7 +86,4 @@ def get_tmdb_person(searchKey, searchVal):
 def rename_field(origin, to, dict):
     return {to if k == origin else k:v for k,v in dict.items()}
     
-<<<<<<< HEAD
     
-=======
->>>>>>> api_dev
