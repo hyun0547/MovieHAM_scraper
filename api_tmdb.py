@@ -8,11 +8,11 @@ with open('/home/movieham/movieScraper/config.yaml') as f:
 
 
 
-def get_tmdb_now_playing_movies():
+def get_tmdb_now_playing_movies(page=1):
     url = "https://api.themoviedb.org/3/movie/now_playing"
     headers = {'Content-Type': 'application/json', 'charset': 'UTF-8', 'Accept': '*/*'}
     
-    params = {'api_key': CONFIG["api"]["tmdb"]["key"], 'language': 'ko-KR'}
+    params = {'api_key': CONFIG["api"]["tmdb"]["key"], 'language': 'ko-KR', 'page': page}
     
     try:
         response = requests.get(url, headers=headers, params=params)
