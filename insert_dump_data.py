@@ -22,7 +22,7 @@ def movie_init(page, sdate, edate):
             
         for movie in json.loads(response.text)["results"]:
             people_init(movie['id'])
-            movieList.append(api_tmdb.rename_field('id', '_id', api_tmdb.get_tmdb_movie_detail(movie['id'])))
+            movieList.append(api_tmdb.convert_field(api_tmdb.get_tmdb_movie_detail(movie['id'])))
     
         if(movies['total_pages'] > page):
             movieList += movie_init(page+1)
@@ -33,21 +33,18 @@ def movie_init(page, sdate, edate):
         print(ex)        
         
         
-        
 def people_init(movieId):
-    mongo_MovieHAM.mongo_insert_many(api_tmdb.get_tmdb_movie_people(movieId))
+    mongo_MovieHAM.mongo_insert_many_people(api_tmdb.get_tmdb_movie_people(movieId))
 
 
-
-
-        
 two_days = datetime.timedelta(days=2)
-sdate = datetime.date(2024, 1, 10)
-edate = datetime.date(2024, 1, 11)
+sdate = datetime.date(2024, 4, 15)
+edate = datetime.date(2024, 4, 16)
 
-while(sdate > datetime.date(2020, 1, 1)):
+
+while(sdate > datetime.date(2024, 4, 10)):
     try:
-        mongo_MovieHAM.mongo_insert_many(movie_init(1, sdate, edate))
+        mongo_MovieHAM.mongo_insert_many_movies(movie_init(1, sdate, edate))
     except Exception as ex:
         print(ex)
     

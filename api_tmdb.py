@@ -2,6 +2,7 @@ import json
 import requests
 import yaml
 import googletrans
+from datetime import datetime
 
 with open('/home/movieham/movieScraper/config.yaml') as f:
     CONFIG = yaml.load(f, Loader=yaml.FullLoader)
@@ -91,7 +92,15 @@ def get_tmdb_person(searchKey, searchVal):
 
 
         
-def rename_field(origin, to, dict):
+def convert_field(dict):
+    return convert_date(rename_field('_id', 'id', dict))
+    
+def convert_date(dict):
+    dict['release_date'] = datetime.strptime(dict['release_date'], '%Y-%m-%d')
+    return dict
+    
+def rename_field(to, origin, dict):
     return {to if k == origin else k:v for k,v in dict.items()}
     
+
     
